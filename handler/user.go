@@ -38,19 +38,21 @@ func (h *userHandler) RegisterUser(c *gin.Context){
 
 	newUser, err := h.userService.RegisterUser(input)
 	if err != nil {
-		response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", nil)
+		errorMessage := gin.H{"errors": err.Error()}
+
+		response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", errorMessage)
 		c.JSON(http.StatusBadRequest, response)
 		 return
 	}
 
-	token, err := h.authService.GenerateToken(newUser.ID)
-	if err != nil {
-		response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", nil)
-		c.JSON(http.StatusBadRequest, response)
-		 return
-	}
+	// token, err := h.authService.GenerateToken(newUser.ID)
+	// if err != nil {
+	// 	response := helper.APIResponse("Register account failed", http.StatusBadRequest, "error", nil)
+	// 	c.JSON(http.StatusBadRequest, response)
+	// 	 return
+	// }
 
-	formatter := user.FormatUser(newUser, token)
+	formatter := user.FormatRegisterUser(newUser)
 	
 	response := helper.APIResponse("Account has been registered", http.StatusOK, "success", formatter)
 
@@ -162,7 +164,7 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 	}
 
 	// id by jwt
-	userID := 1
+	userID := 3
 
 	path := fmt.Sprintf("images/%d-%s", userID, file.Filename)
 

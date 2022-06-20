@@ -1,18 +1,20 @@
 package main
 
 import (
+	"database/sql"
 	"diary/auth"
 	"diary/handler"
 	"diary/user"
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
+	_ "github.com/mattn/go-sqlite3"
+	cors "github.com/rs/cors/wrapper/gin"
 )
 
 func main() {
-	db, err := gorm.Open(sqlite.Open("diary.db"), &gorm.Config{})
+	db, err := sql.Open("sqlite3", "diary.db")
+	// db, err := gorm.Open(sqlite.Open("diary.db"), &gorm.Config{})
 
 	if err != nil {
 		log.Fatal(err.Error())
@@ -25,8 +27,9 @@ func main() {
 	userHandler := handler.NewUserHandler(userService, authService)
 
 	router := gin.Default()
+
+	router.Use(cors.Default())
 	api := router.Group("api/v1")
-	
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/check-email", userHandler.CheckEmailRegister)
@@ -35,6 +38,7 @@ func main() {
 
 
 }
+
 
 // Layering :
 // handler
