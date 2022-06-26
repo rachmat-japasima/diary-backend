@@ -589,4 +589,35 @@ Response
 }
 ```
 
+### Get Last Reader 
+Untuk mendapatkan data pembaca buku terakhir
+
+Endpoint `Method : GET`
+```
+'Domain'/api/v1/books/history/'book_id'
+```
+
+Parameter `Body : none`
+```
+none
+```
+Response
+```
+{
+    "meta": {
+        "message": "Detail of Book",
+        "code": 200,
+        "status": "success"
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "Rachmat",
+            "gender": "Male",
+            "file_avatar": "images/avatars/1-deSims - BuildWith Angga.png"
+        }
+    ]
+}
+```
+
 Note : Panduan akan diupdate secara berkala sesuai tahap development
